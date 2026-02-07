@@ -6,6 +6,8 @@ function App(){
   const [users,setUsers]=useState([]);
   const [loading,setLoading]=useState(true);
   const [error,setError]=useState(null);
+  const [search,setSearch]=useState("");
+
 
 
   useEffect(()=>{
@@ -23,14 +25,26 @@ function App(){
 
   },[])
 
+
+   const filteredUsers=users.filter((user)=>
+  user.name.toLowerCase().includes(search.toLowerCase())||
+   user.email.toLowerCase().includes(search.toLowerCase)
+  );
+
   if (loading) return <h2>Loading users...</h2>
   if (error)  return <h2>Error:</h2>
 
   return (
     <div className="app">
       <h1>User directory</h1>
+      <input type="text"placeholder="Search by name or email"
+      value={search}
+      onChange={(e)=>setSearch(e.target.value)}
+      />
+      {filteredUsers.length===0&&<p>No users found</p>}
 
-      {users.map((user)=>(
+
+      {filteredUsers.map((user)=>(
           <div className="card"key={user.id}>
 
         <h3>{user.name}</h3>
